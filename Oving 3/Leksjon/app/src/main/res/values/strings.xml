@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Venner</string>
+
+    <!-- Friends screen -->
+    <string name="friends_title">Venner</string>
+    <string name="add_friend">Legg til venn</string>
+    <string name="edit_friend">Rediger venn</string>
+    <string name="empty_state">Ingen venner enda. Trykk + for å legge til.</string>
+
+    <!-- Edit screen -->
+    <string name="name_label">Navn</string>
+    <string name="birthdate_label">Fødselsdato</string>
+    <string name="save">Lagre</string>
+    <string name="cancel">Avbryt</string>
+
+    <!-- Row -->
+    <string name="birthday_fmt">%1$02d.%2$02d.%3$04d</string>
+</resources>
