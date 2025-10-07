@@ -1,0 +1,17 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">Aktiviteter og intensjoner</string>
+    <string name="title_activity">Hjem</string>
+
+    <!-- Main screen buttons -->
+    <string name="generate_number">Generer tall</string>
+    <string name="open_math">Åpne matte-oppgave</string>
+
+    <!-- Math screen -->
+    <string name="adder">Adder</string>
+    <string name="multipliser">Multipliser</string>
+    <string name="svar_label">Svar:</string>
+    <string name="ovre_grense_label">Øvre grense:</string>
+    <string name="riktig">Riktig!</string>
+    <string name="feil_riktig_er">Feil. Riktig svar er</string>
+</resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Tall 1 og 2 (start 3 og 5) -->
+    <TextView
+        android:id="@+id/tvA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="3"
+        android:textSize="32sp" />
+
+    <TextView
+        android:id="@+id/tvB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="5"
+        android:textSize="32sp"
+        android:layout_marginTop="8dp" />
+
+    <!-- Ledetekst + Svar -->
+    <TextView
+        android:id="@+id/tvSvarLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/svar_label"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etSvar"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="8" />
+
+    <!-- Ledetekst + Øvre grense -->
+    <TextView
+        android:id="@+id/tvMaxLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ovre_grense_label"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etMax"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="10" />
+
+    <!-- Knapper -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/adder"
+            android:onClick="onClickAdder" />
+
+        <Button
+            android:id="@+id/btnMul"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/multipliser"
+            android:onClick="onClickMultipliser"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Where we show the generated number -->
+    <TextView
+        android:id="@+id/tvRandomResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="—"
+        android:textSize="24sp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnGenerate"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/generate_number"
+        android:onClick="onClickGenerateRandom" />
+
+    <Button
+        android:id="@+id/btnOpenMath"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/open_math"
+        android:onClick="onClickOpenMath"
+        android:layout_marginTop="12dp" />
+</LinearLayout>
