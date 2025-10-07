@@ -15,7 +15,7 @@ class MainActivity : Activity() {
         setContentView(R.layout.activity_main)
     }
 
-    // Button 1: generate a random number and show it in tvRandomResult
+    // Button 1: random number + show in tvRandomResult
     fun onClickGenerateRandom(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent("ntnu.leksjon_02.action.RANDOM_NUMBER")
             .putExtra(RandomNumberActivity.EXTRA_MAX, 100) // upper bound; change if you like

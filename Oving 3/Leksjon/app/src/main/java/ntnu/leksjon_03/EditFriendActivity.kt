@@ -13,7 +13,7 @@ class EditFriendActivity : Activity() {
     companion object {
         const val EXTRA_NAME = "name"
         const val EXTRA_YEAR = "year"
-        const val EXTRA_MONTH = "month" // 1..12
+        const val EXTRA_MONTH = "month"
         const val EXTRA_DAY = "day"
     }
 
@@ -37,7 +37,6 @@ class EditFriendActivity : Activity() {
         if (y > 0 && m > 0 && d > 0) {
             dp.updateDate(y, m - 1, d) // DatePicker uses 0-based month
         } else {
-            // default to today
             val c = Calendar.getInstance()
             dp.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH))
         }

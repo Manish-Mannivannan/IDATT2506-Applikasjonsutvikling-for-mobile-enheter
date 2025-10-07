@@ -30,12 +30,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         MENU_FORNAVN -> {
-            // Fornavn skal logges som advarsel
+            // Fornavn som advarsel
             Log.w(TAG, firstName)
             true
         }
         MENU_ETTERNAVN -> {
-            // Etternavn skal logges som feilmelding
+            // Etternavn logges som feilmelding
             Log.e(TAG, lastName)
             true
         }

@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), ListFragment.OnTitleClickListener {
 				.commit()
 		}
 
-		// One layout used for both orientations; adjust orientation/weights here
+		// One layout for both orientations
 		val content = findViewById<LinearLayout>(R.id.content)
 		val list = findViewById<FrameLayout>(R.id.listContainer)
 		val detail = findViewById<FrameLayout>(R.id.detailContainer)

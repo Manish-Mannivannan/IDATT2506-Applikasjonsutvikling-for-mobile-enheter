@@ -27,8 +27,6 @@ class MathActivity : Activity() {
         etSvar = findViewById(R.id.etSvar)
         etMax = findViewById(R.id.etMax)
     }
-
-    // Button: "Adder"
     fun onClickAdder(@Suppress("UNUSED_PARAMETER") v: View) {
         val a = tvA.text.toString().toIntOrNull() ?: 0
         val b = tvB.text.toString().toIntOrNull() ?: 0
@@ -37,8 +35,6 @@ class MathActivity : Activity() {
         showResult(bruker, fasit)
         requestRandomForAThenB()
     }
-
-    // Button: "Multipliser"
     fun onClickMultipliser(@Suppress("UNUSED_PARAMETER") v: View) {
         val a = tvA.text.toString().toIntOrNull() ?: 0
         val b = tvB.text.toString().toIntOrNull() ?: 0
