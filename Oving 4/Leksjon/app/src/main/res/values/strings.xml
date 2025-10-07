@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fragmenter – Øving</string>
+    <string name="previous">PREVIOUS</string>
+    <string name="next">NEXT</string>
+</resources>

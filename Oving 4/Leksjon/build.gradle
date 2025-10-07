@@ -1,0 +1,30 @@
+// Top-level build file
+
+buildscript {
+    // Use one modern Kotlin version everywhere to avoid duplicate class errors
+    ext.kotlin_version = '1.9.24'
+
+    repositories {
+        google()
+        mavenCentral()
+        // jcenter() removed (shut down)
+    }
+    dependencies {
+        // Keep the AGP version you already chose
+        classpath "com.android.tools.build:gradle:8.13.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+// If you still have this block, keep only active repos (no jcenter)
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Gradle 8-friendly clean task
+tasks.register("clean", Delete) {
+    delete(rootProject.buildDir)
+}

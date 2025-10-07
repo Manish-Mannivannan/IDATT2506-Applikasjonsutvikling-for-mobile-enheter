@@ -1,0 +1,29 @@
+<resources>
+    <string-array name="titles">
+        <item>Batman Begins</item>
+        <item>The Prestige</item>
+        <item>The Dark Knight</item>
+        <item>Inception</item>
+        <item>The Dark Knight Rises</item>
+        <item>Interstellar</item>
+    </string-array>
+
+    <string-array name="descriptions">
+        <item>Desc for Batman Begins…</item>
+        <item>Desc for The Prestige…</item>
+        <item>Desc for The Dark Knight…</item>
+        <item>Desc for Inception…</item>
+        <item>Desc for The Dark Knight Rises…</item>
+        <item>Desc for Interstellar…</item>
+    </string-array>
+
+    <!-- posters[] points to drawables in res/drawable/ -->
+    <array name="posters">
+        <item>@drawable/poster_batman_begins</item>
+        <item>@drawable/poster_prestige</item>
+        <item>@drawable/poster_dark_knight</item>
+        <item>@drawable/poster_inception</item>
+        <item>@drawable/poster_dark_knight_rises</item>
+        <item>@drawable/poster_interstellar</item>
+    </array>
+</resources>
