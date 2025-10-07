@@ -1,0 +1,35 @@
+# ---- OS junk
+.DS_Store
+
+# ---- Android Studio / IntelliJ
+*.iml
+.idea/
+**/.idea/
+
+# ---- Gradle
+.gradle/
+**/.gradle/
+build/
+**/build/
+
+# Keep Gradle wrapper (should be versioned)
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+!gradlew
+!gradlew.bat
+
+# ---- Local machine config
+local.properties
+**/local.properties
+
+# ---- NDK / CMake
+.externalNativeBuild/
+**/.externalNativeBuild/
+.cxx/
+**/.cxx/
+
+# ---- Misc
+captures/
+**/captures/
+*.jks
+*.keystore
