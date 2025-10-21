@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Callback</string>
+    <string name="counter1">counter1</string>
+    <string name="counter2">counter2</string>
+</resources>
