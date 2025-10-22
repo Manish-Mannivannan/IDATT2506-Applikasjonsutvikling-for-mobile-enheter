@@ -39,7 +39,7 @@ class Client(
 				reader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
 				writer = PrintWriter(socket!!.getOutputStream(), true)
 
-				// optional hello to server
+				// hello to server (kan fjernes)
 				send("Hei! (client connected)")
 
 				// continuous read loop
@@ -58,7 +58,7 @@ class Client(
 	}
 
 	fun send(text: String) {
-		// Always write from IO coroutine and flush explicitly
+		// Always write from IO coroutine and flush explicitly didn't work outside the scope
 		scope.launch(Dispatchers.IO) {
 			try {
 				writer?.println(text)

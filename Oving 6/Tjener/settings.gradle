@@ -10,7 +10,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // jcenter() removed (deprecated)
     }
 }
 rootProject.name = "06 leksjon - Tjener"

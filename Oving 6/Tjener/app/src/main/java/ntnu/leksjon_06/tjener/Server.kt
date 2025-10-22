@@ -98,7 +98,7 @@ class Server(
 	fun broadcast(line: String) {
 		val dead = mutableListOf<ClientHandler>()
 		for (c in clients) {
-			val ok = c.send(line)   // will println + flush in handler
+			val ok = c.send(line)   // println + flush in handler
 			if (!ok) dead.add(c)
 		}
 		for (d in dead) {
@@ -134,7 +134,7 @@ private class ClientHandler(
 					onMessage(name, line)
 				}
 			} catch (_: Throwable) {
-				// ignore; handled in finally/close
+				// ignore, handled in finally/close
 			} finally {
 				close()
 				onClosed(this@ClientHandler)
