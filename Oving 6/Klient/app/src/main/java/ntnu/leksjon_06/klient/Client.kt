@@ -30,6 +30,8 @@ class Client(
 			try {
 				socket = Socket()
 				// small timeout so UI doesn’t hang forever
+				socket?.tcpNoDelay = true
+				socket?.soTimeout = 0 // infinite read
 				socket?.connect(InetSocketAddress(serverIp, serverPort), 5000)
 				onStatus("Koblet til $serverIp:$serverPort")
 				onConnected()
@@ -56,10 +58,12 @@ class Client(
 	}
 
 	fun send(text: String) {
-		try {
-			writer?.println(text)
-		} catch (_: Throwable) {
-			// ignore; will be handled by read loop closing
+		// Always write from IO coroutine and flush explicitly
+		scope.launch(Dispatchers.IO) {
+			try {
+				writer?.println(text)
+				writer?.flush()
+			} catch (_: Throwable) { /* ignore; read loop will close on failure */ }
 		}
 	}
 

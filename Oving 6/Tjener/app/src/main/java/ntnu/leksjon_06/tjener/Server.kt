@@ -96,13 +96,11 @@ class Server(
 	}
 
 	fun broadcast(line: String) {
-		// Send to all connected clients
 		val dead = mutableListOf<ClientHandler>()
 		for (c in clients) {
-			val ok = c.send(line)
+			val ok = c.send(line)   // will println + flush in handler
 			if (!ok) dead.add(c)
 		}
-		// Clean up any dead clients
 		for (d in dead) {
 			d.close()
 			clients.remove(d)
@@ -132,7 +130,7 @@ private class ClientHandler(
 				// Read loop
 				while (isActive && !socket.isClosed) {
 					val line = reader?.readLine() ?: break
-					if (line.isBlank()) continue
+					if (line == null) break
 					onMessage(name, line)
 				}
 			} catch (_: Throwable) {
@@ -147,6 +145,7 @@ private class ClientHandler(
 	fun send(text: String): Boolean {
 		return try {
 			writer?.println(text)
+			writer?.flush()
 			true
 		} catch (_: Throwable) {
 			false

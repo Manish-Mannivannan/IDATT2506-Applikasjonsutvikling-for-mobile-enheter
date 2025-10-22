@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
 			val msg = messageInput.text.toString().trim()
 			if (msg.isNotEmpty()) {
 				client?.send(msg)
-				appendChatLine("Me: $msg")
 				messageInput.setText("")
 			}
 		}
