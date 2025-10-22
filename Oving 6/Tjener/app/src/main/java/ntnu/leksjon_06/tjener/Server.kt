@@ -1,72 +1,162 @@
 package ntnu.leksjon_06.tjener
 
-import android.widget.TextView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 import java.io.PrintWriter
+import java.net.InetAddress
 import java.net.ServerSocket
 import java.net.Socket
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicInteger
 
-class Server(private val textView: TextView, private val PORT: Int = 12345) {
+class Server(
+	private val port: Int = 12345,
+	private val onStatus: (String) -> Unit,
+	private val onMessage: (String) -> Unit,
+	private val onClientCountChanged: (Int) -> Unit
+) {
 
-	/**
-	 * Egendefinert set() som gjør at vi enkelt kan endre teksten som vises i skjermen til
-	 * emulatoren med
-	 *
-	 * ```
-	 * ui = "noe"
-	 * ```
-	 */
-	private var ui: String? = ""
-		set(str) {
-			MainScope().launch { textView.text = str }
-			field = str
-		}
+	private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+	private var serverSocket: ServerSocket? = null
+	private val clients = CopyOnWriteArrayList<ClientHandler>()
+	private val clientIdSeq = AtomicInteger(1)
+
+	@Volatile
+	private var running = false
 
 	fun start() {
-		CoroutineScope(Dispatchers.IO).launch {
+		if (running) return
+		running = true
 
+		scope.launch {
 			try {
-				ui = "Starter Tjener ..."
-				// "innapropriate blocking method call" advarsel betyr at tråden
-				// stopper helt opp og ikke går til neste linje før denne fullfører, i dette
-				// eksempelet er ikke dette så farlig så vi ignorerer advarselen.
-				ServerSocket(PORT).use { serverSocket: ServerSocket ->
+				serverSocket = ServerSocket(port)
+				val hostIp = try {
+					// Display a best-effort IP for local Wi-Fi (may vary by device)
+					InetAddress.getLocalHost().hostAddress ?: "0.0.0.0"
+				} catch (_: Throwable) { "0.0.0.0" }
 
-					ui = "ServerSocket opprettet, venter på at en klient kobler seg til...."
+				onStatus("Lytter på $hostIp:$port\nVenter på klienter...")
 
-					serverSocket.accept().use { clientSocket: Socket ->
-
-						ui = "En Klient koblet seg til:\n$clientSocket"
-
-						//send tekst til klienten
-						sendToClient(clientSocket, "Velkommen Klient!")
-
-						// Hent tekst fra klienten
-						readFromClient(clientSocket)
+				while (running) {
+					val socket = try {
+						serverSocket?.accept() ?: break
+					} catch (_: Throwable) {
+						break
 					}
+					if (!running) {
+						socket.close()
+						break
+					}
+					val id = clientIdSeq.getAndIncrement()
+					val name = "Client-$id"
+					val handler = ClientHandler(
+						name = name,
+						socket = socket,
+						onMessage = { from, text ->
+							// Broadcast to everyone with sender tag
+							val line = "$from: $text"
+							broadcast(line)
+							onMessage(line)
+						},
+						onClosed = { h ->
+							clients.remove(h)
+							onStatus("Koblet fra: ${h.name} (tilkoblet: ${clients.size})")
+							onClientCountChanged(clients.size)
+						}
+					)
+					clients.add(handler)
+					onStatus("Tilkoblet: $name fra ${socket.inetAddress.hostAddress} (tilkoblet: ${clients.size})")
+					onClientCountChanged(clients.size)
+					handler.start(scope)
 				}
-			} catch (e: IOException) {
-				e.printStackTrace()
-				ui = e.message
+			} catch (e: Exception) {
+				onStatus("Server-feil: ${e.message}")
+			} finally {
+				stop()
 			}
 		}
 	}
 
-	private fun readFromClient(socket: Socket) {
-		val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
-		val message = reader.readLine()
-		ui = "Klienten sier:\n$message"
+	fun stop() {
+		if (!running) return
+		running = false
+		try {
+			serverSocket?.close()
+		} catch (_: Throwable) {}
+		serverSocket = null
+
+		// Close all clients
+		clients.forEach { it.close() }
+		clients.clear()
+
+		scope.cancel()
 	}
 
-	private fun sendToClient(socket: Socket, message: String) {
-		val writer = PrintWriter(socket.getOutputStream(), true)
-		writer.println(message)
-		ui = "Sendte følgende til klienten:\n$message"
+	fun broadcast(line: String) {
+		// Send to all connected clients
+		val dead = mutableListOf<ClientHandler>()
+		for (c in clients) {
+			val ok = c.send(line)
+			if (!ok) dead.add(c)
+		}
+		// Clean up any dead clients
+		for (d in dead) {
+			d.close()
+			clients.remove(d)
+		}
+	}
+}
+
+private class ClientHandler(
+	val name: String,
+	private val socket: Socket,
+	private val onMessage: (from: String, text: String) -> Unit,
+	private val onClosed: (ClientHandler) -> Unit
+) {
+	private var reader: BufferedReader? = null
+	private var writer: PrintWriter? = null
+	private var job: Job? = null
+
+	fun start(scope: CoroutineScope) {
+		job = scope.launch(Dispatchers.IO) {
+			try {
+				reader = BufferedReader(InputStreamReader(socket.getInputStream()))
+				writer = PrintWriter(socket.getOutputStream(), true)
+
+				// Optional hello
+				send("Velkommen! Du er $name")
+
+				// Read loop
+				while (isActive && !socket.isClosed) {
+					val line = reader?.readLine() ?: break
+					if (line.isBlank()) continue
+					onMessage(name, line)
+				}
+			} catch (_: Throwable) {
+				// ignore; handled in finally/close
+			} finally {
+				close()
+				onClosed(this@ClientHandler)
+			}
+		}
+	}
+
+	fun send(text: String): Boolean {
+		return try {
+			writer?.println(text)
+			true
+		} catch (_: Throwable) {
+			false
+		}
+	}
+
+	fun close() {
+		try { reader?.close() } catch (_: Throwable) {}
+		try { writer?.close() } catch (_: Throwable) {}
+		try { socket.close() } catch (_: Throwable) {}
+		try { job?.cancel() } catch (_: Throwable) {}
 	}
 }

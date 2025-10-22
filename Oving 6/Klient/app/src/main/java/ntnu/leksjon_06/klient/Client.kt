@@ -1,66 +1,80 @@
 package ntnu.leksjon_06.klient
 
-import android.widget.TextView
 import kotlinx.coroutines.*
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 import java.io.PrintWriter
+import java.net.InetSocketAddress
 import java.net.Socket
 
 class Client(
-	private val textView: TextView,
-	private val SERVER_IP: String = "10.0.2.2",
-	private val SERVER_PORT: Int = 12345,
+	private val serverIp: String,
+	private val serverPort: Int,
+	private val onStatus: (String) -> Unit,
+	private val onConnected: () -> Unit,
+	private val onDisconnected: () -> Unit,
+	private val onMessage: (String) -> Unit
 ) {
+	private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-	/**
-	 * Egendefinert set() som gjør at vi enkelt kan endre teksten som vises i skjermen til
-	 * emulatoren med
-	 *
-	 * ```
-	 * ui = "noe"
-	 * ```
-	 */
-	private var ui: String? = ""
-		set(str) {
-			MainScope().launch { textView.text = str }
-			field = str
-		}
-
+	private var socket: Socket? = null
+	private var reader: BufferedReader? = null
+	private var writer: PrintWriter? = null
+	@Volatile private var running = false
 
 	fun start() {
-		CoroutineScope(Dispatchers.IO).launch {
-			ui = "Kobler til tjener..."
+		if (running) return
+		running = true
+
+		scope.launch {
 			try {
-				Socket(SERVER_IP, SERVER_PORT).use { socket: Socket ->
-					ui = "Koblet til tjener:\n$socket"
+				socket = Socket()
+				// small timeout so UI doesn’t hang forever
+				socket?.connect(InetSocketAddress(serverIp, serverPort), 5000)
+				onStatus("Koblet til $serverIp:$serverPort")
+				onConnected()
 
-					delay(5000)
+				reader = BufferedReader(InputStreamReader(socket!!.getInputStream()))
+				writer = PrintWriter(socket!!.getOutputStream(), true)
 
-					readFromServer(socket)
+				// optional hello to server
+				send("Hei! (client connected)")
 
-					delay(5000)
-
-					sendToServer(socket, "Heisann Tjener! Hyggelig å hilse på deg")
-
+				// continuous read loop
+				while (isActive && running && socket?.isClosed == false) {
+					val line = reader?.readLine() ?: break
+					if (line.isBlank()) continue
+					onMessage(line)
 				}
-			} catch (e: IOException) {
-				e.printStackTrace()
-				ui = e.message
+			} catch (e: Exception) {
+				onStatus("Tilkoblingsfeil: ${e.message}")
+			} finally {
+				close()
+				onDisconnected()
 			}
 		}
 	}
 
-	private fun readFromServer(socket: Socket) {
-		val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
-		val message = reader.readLine()
-		ui = "Melding fra tjeneren:\n$message"
+	fun send(text: String) {
+		try {
+			writer?.println(text)
+		} catch (_: Throwable) {
+			// ignore; will be handled by read loop closing
+		}
 	}
 
-	private fun sendToServer(socket: Socket, message: String) {
-		val writer = PrintWriter(socket.getOutputStream(), true)
-		writer.println(message)
-		ui = "Sendte følgende til tjeneren: \n\"$message\""
+	fun stop() {
+		running = false
+		close()
+		scope.cancel()
+	}
+
+	private fun close() {
+		try { reader?.close() } catch (_: Throwable) {}
+		try { writer?.close() } catch (_: Throwable) {}
+		try { socket?.close() } catch (_: Throwable) {}
+		reader = null
+		writer = null
+		socket = null
 	}
 }
