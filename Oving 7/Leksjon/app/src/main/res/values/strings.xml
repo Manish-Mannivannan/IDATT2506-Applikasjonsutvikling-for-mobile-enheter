@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Datalagring Filmer</string>
+
+    <!-- Main -->
+    <string name="info">Velg et alternativ i menyen for å hente data fra databasen.</string>
+
+    <!-- Menu -->
+    <string name="menu_settings">Innstillinger</string>
+
+    <!-- Settings -->
+    <string name="back_button">Tilbake</string>
+    <string name="bg_color_key">bgColor</string>
+    <string name="bg_color_title">Bakgrunnsfarge</string>
+
+    <string-array name="bg_color_names">
+        <item>Lys grå</item>
+        <item>Krem</item>
+        <item>Mørk</item>
+    </string-array>
+    <string-array name="bg_color_values">
+        <item>#F2F2F2</item>
+        <item>#FFF3E0</item>
+        <item>#303030</item>
+    </string-array>
+</resources>

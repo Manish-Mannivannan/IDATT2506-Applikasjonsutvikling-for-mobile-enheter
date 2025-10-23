@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:key="@string/bg_color_key"
+        app:title="@string/bg_color_title"
+        app:entries="@array/bg_color_names"
+        app:entryValues="@array/bg_color_values"
+        app:useSimpleSummaryProvider="false"
+        app:icon="@drawable/settings_icon" />
+
+</PreferenceScreen>

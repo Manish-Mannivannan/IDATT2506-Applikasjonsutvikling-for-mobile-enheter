@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Inception",
+    "director": "Christopher Nolan",
+    "actors": ["Leonardo DiCaprio", "Joseph Gordon-Levitt"]
+  },
+  {
+    "title": "Pulp Fiction",
+    "director": "Quentin Tarantino",
+    "actors": ["John Travolta", "Samuel L. Jackson"]
+  },
+  {
+    "title": "Interstellar",
+    "director": "Christopher Nolan",
+    "actors": ["Matthew McConaughey", "Anne Hathaway"]
+  },
+  {
+    "title": "The Matrix",
+    "director": "The Wachowskis",
+    "actors": ["Keanu Reeves", "Carrie-Anne Moss"]
+  },
+  {
+    "title": "The Social Network",
+    "director": "David Fincher",
+    "actors": ["Jesse Eisenberg", "Andrew Garfield"]
+  }
+]
