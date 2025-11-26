@@ -22,6 +22,7 @@ const ShoppingListsPage: React.FC = () => {
     createList, 
     deleteList, 
     addItem, 
+    deleteItem,
     toggleItemDone, 
     updateListItems,
     setActiveListId
@@ -69,6 +70,7 @@ const ShoppingListsPage: React.FC = () => {
             <ListItems 
               items={activeList.items}
               onToggleItemDone={(itemId) => toggleItemDone(activeList.id, itemId)}
+              onDeleteItem={(itemId) => deleteItem(activeList.id, itemId)}
               onUpdateItems={(items) => updateListItems(activeList.id, items)}
             />
           </>

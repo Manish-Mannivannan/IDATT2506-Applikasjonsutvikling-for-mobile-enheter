@@ -7,18 +7,20 @@ import {
   IonReorderGroup, 
   IonReorder, 
   IonIcon,
+  IonButton,
   ItemReorderEventDetail
 } from '@ionic/react';
-import { menuOutline } from 'ionicons/icons';
+import { menuOutline, trashOutline } from 'ionicons/icons';
 import { ListItem } from '../types';
 
 interface ListItemsProps {
   items: ListItem[];
   onToggleItemDone: (id: string) => void;
+  onDeleteItem: (id: string) => void;
   onUpdateItems: (items: ListItem[]) => void;
 }
 
-const ListItems: React.FC<ListItemsProps> = ({ items, onToggleItemDone, onUpdateItems }) => {
+const ListItems: React.FC<ListItemsProps> = ({ items, onToggleItemDone, onDeleteItem, onUpdateItems }) => {
   const notDoneItems = items.filter(i => !i.done);
   const doneItems = items.filter(i => i.done);
 
@@ -54,9 +56,23 @@ const ListItems: React.FC<ListItemsProps> = ({ items, onToggleItemDone, onUpdate
                 style={{ '--size': '22px' }}
               />
               <IonLabel style={{ fontWeight: '500' }}>{item.text}</IonLabel>
-              <IonReorder slot="end">
-                <IonIcon icon={menuOutline} color="medium" />
-              </IonReorder>
+              
+              {/* Actions: Delete Button + Reorder Handle */}
+              <div slot="end" style={{ display: 'flex', alignItems: 'center' }}>
+                <IonButton 
+                  fill="clear" 
+                  color="medium" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteItem(item.id);
+                  }}
+                >
+                  <IonIcon icon={trashOutline} />
+                </IonButton>
+                <IonReorder>
+                  <IonIcon icon={menuOutline} color="medium" />
+                </IonReorder>
+              </div>
             </IonItem>
           ))}
         </IonReorderGroup>
@@ -88,6 +104,17 @@ const ListItems: React.FC<ListItemsProps> = ({ items, onToggleItemDone, onUpdate
               style={{ '--size': '22px' }}
             />
             <IonLabel style={{ textDecoration: 'line-through' }}>{item.text}</IonLabel>
+            <IonButton 
+              slot="end"
+              fill="clear" 
+              color="medium" 
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteItem(item.id);
+              }}
+            >
+              <IonIcon icon={trashOutline} />
+            </IonButton>
           </IonItem>
         ))}
       </IonList>

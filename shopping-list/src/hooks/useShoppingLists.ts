@@ -65,6 +65,18 @@ export const useShoppingLists = () => {
     }));
   };
 
+  const deleteItem = (listId: string, itemId: string) => {
+    setLists(prev => prev.map(list => {
+      if (list.id === listId) {
+        return {
+          ...list,
+          items: list.items.filter(item => item.id !== itemId)
+        };
+      }
+      return list;
+    }));
+  };
+
   const toggleItemDone = (listId: string, itemId: string) => {
     setLists(prev => prev.map(list => {
       if (list.id === listId) {
@@ -97,6 +109,7 @@ export const useShoppingLists = () => {
     createList,
     deleteList,
     addItem,
+    deleteItem,
     toggleItemDone,
     updateListItems
   };
