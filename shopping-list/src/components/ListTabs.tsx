@@ -26,7 +26,7 @@ const ListTabs: React.FC<ListTabsProps> = ({
             scrollable 
             value={activeListId || lists[0].id} 
             onIonChange={e => onSelectList(e.detail.value as string)}
-            mode="md" // Material design looks cleaner for segments usually
+            mode="md" // Material design
           >
             {lists.map(list => (
               <IonSegmentButton key={list.id} value={list.id}>

@@ -7,7 +7,6 @@ export const useShoppingLists = () => {
   const [activeListId, setActiveListId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   
-  // Ref to track if initial load is done to prevent overwriting with empty state
   const loadedRef = useRef(false);
 
   useEffect(() => {
@@ -42,7 +41,6 @@ export const useShoppingLists = () => {
   const deleteList = (id: string) => {
     setLists(prev => {
       const newLists = prev.filter(l => l.id !== id);
-      // If we deleted the active list, switch to another one or null
       if (activeListId === id) {
         setActiveListId(newLists.length > 0 ? newLists[0].id : null);
       }
@@ -58,7 +56,6 @@ export const useShoppingLists = () => {
     };
     setLists(prev => prev.map(list => {
       if (list.id === listId) {
-        // Add new items to the top
         return { ...list, items: [newItem, ...list.items] };
       }
       return list;
@@ -91,7 +88,7 @@ export const useShoppingLists = () => {
     }));
   };
 
-  // Replaces the items array for a specific list (used for reordering)
+  // Replaces the items array for a specific list
   const updateListItems = (listId: string, newItems: ListItem[]) => {
     setLists(prev => prev.map(list => {
       if (list.id === listId) {
