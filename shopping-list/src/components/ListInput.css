@@ -1,0 +1,9 @@
+.list-input {
+  --background: var(--ion-color-step-100);
+  --color: var(--ion-text-color);
+  --placeholder-color: var(--ion-color-step-600);
+
+  padding: 0.75rem;
+  border-radius: 12px;
+  font-size: 1rem;
+}
